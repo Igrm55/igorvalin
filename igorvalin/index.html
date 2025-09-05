@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - IgorValen Distribuidora</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+    <!-- Babel for JSX in the browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- html2canvas for screenshots -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- JSZip for zipping files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* styles/globals.css equivalent */
+        :root {
+            --brand-green: #0f8a3a;
+            --brand-green-darker: #0b5d29;
+            --brand-red: #de1f36;
+            --text: #111111;
+            --bg-soft: #f3f4f6; 
+        }
+
+        html, body {
+            min-height: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--brand-red); /* Cor base para o final da página */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Camada verde superior com curva */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50vh; /* Altura da área verde */
+            min-height: 400px;
+            background: var(--brand-green);
+            clip-path: ellipse(100% 100% at 50% 0%);
+            z-index: 0; 
+        }
+        
+        /* Textura de ondas pretas */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="20" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg"><path d="M0 10 C 25 0, 75 20, 100 10" stroke="%23000000" stroke-width="0.5" fill="none" opacity="0.1"/></svg>');
+            background-size: 100px 20px;
+            pointer-events: none;
+            z-index: 1; 
+        }
+        
+        #root {
+            position: relative;
+            z-index: 2; /* Conteúdo principal sempre no topo */
+            padding-bottom: 200px; /* Espaço para as ondas do rodapé não cobrirem o conteúdo */
+        }
+        
+        .panel {
+            background: white; /* Alterado para branco sólido */
+            border-radius: 1.5rem; /* 24px */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-wave-wrapper {
+            position: relative;
+            padding: 2.5rem 1.5rem;
+            border-radius: 1.5rem; /* 24px */
+            overflow: hidden;
+            background-color: var(--brand-green);
+        }
+
+        .category-wave-wrapper::before, .category-wave-wrapper::after {
+            content: '';
+            position: absolute;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            background: var(--brand-green-darker);
+            border-radius: 50%;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .category-wave-wrapper::before {
+            top: 10%;
+            transform: rotate(4deg);
+        }
+
+        .category-wave-wrapper::after {
+            bottom: 10%;
+            transform: rotate(-4deg);
+        }
+
+        .category-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 300px;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .wave-container::before, .wave-container::after {
+            content: '';
+            position: absolute;
+            left: -50%;
+            width: 200%;
+            height: 100%;
+            border-radius: 50% 50% 0 0;
+            background: var(--brand-green); /* Ambas as ondas usam o verde do header */
+        }
+
+        .wave-container::after {
+            opacity: 0.7; /* Camada de trás com opacidade */
+            bottom: -200px;
+            transform: rotate(5deg);
+        }
+
+        .wave-container::before {
+            opacity: 1; /* Camada da frente sólida */
+            bottom: -220px;
+            transform: rotate(-3deg);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <div class="wave-container"></div>
+
+    <!-- =================================================================== -->
+    <!-- lib/api.js (STUBS)                                                  -->
+    <!-- =================================================================== -->
+    <script type="text/babel">
+        const MOCK_PRODUCTS = [
+            // Bebidas não alcoólicas
+            { id: 'p1', name: 'Refrigerante Goob 2L', category: 'Bebidas não alcoólicas', details: [{flavor: 'Cola', code: '66'}, {flavor: 'Guaraná', code: '69'}, {flavor: 'Laranja', code: '70'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Bebida+1', sortOrder: 1, active: true },
+            { id: 'p2', name: 'Energético Ener Up 250ML', category: 'Bebidas não alcoólicas', details: [{flavor: 'Tradicional', code: '49'}, {flavor: 'Tropical', code: '50'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Bebida+2', sortOrder: 2, active: true },
+            { id: 'p7', name: 'Suco de Laranja 1L', category: 'Bebidas não alcoólicas', details: [{flavor: 'Laranja', code: '71'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Bebida+3', sortOrder: 3, active: true },
+            
+            // Bebidas alcoólicas
+            { id: 'p4', name: 'Cerveja Skol Lata 350ml', category: 'Bebidas alcoólicas', details: [{flavor: 'Pilsen', code: '150'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Alcoólica+1', sortOrder: 4, active: true },
+            { id: 'p8', name: 'Vinho Tinto Suave 750ml', category: 'Bebidas alcoólicas', details: [{flavor: 'Tinto Suave', code: '155'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Alcoólica+2', sortOrder: 5, active: true },
+
+            // Bomboneire
+            { id: 'p3', name: 'Bombom Garoto', category: 'Bomboneire', details: [{flavor: 'Sortidos', code: '101'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Doce+1', sortOrder: 6, active: true },
+            { id: 'p9', name: 'Chocolate Lacta 90g', category: 'Bomboneire', details: [{flavor: 'Ao Leite', code: '105'}, {flavor: 'Branco', code: '106'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Doce+2', sortOrder: 7, active: true },
+
+            // Cigarro
+            { id: 'p5', name: 'Rothmans Click', category: 'Cigarro', details: [{flavor: 'Mentolado', code: '201'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Cigarro+1', sortOrder: 8, active: true },
+
+            // Utilidades
+            { id: 'p6', name: 'Isqueiro Bic', category: 'Utilidades', details: [{flavor: 'Cores Sortidas', code: '301'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Utilidade+1', sortOrder: 9, active: true },
+            { id: 'p10', name: 'Vela de Aniversário', category: 'Utilidades', details: [{flavor: 'Número 0', code: '305'}, {flavor: 'Número 1', code: '306'}, {flavor: 'Número 9', code: '314'}], imageUrl: 'https://placehold.co/400x400/e2e8f0/334155?text=Utilidade+2', sortOrder: 10, active: true },
+        ];
+
+        let MOCK_SETTINGS = {
+            id: 1,
+            categoriesOrder: ['Bebidas não alcoólicas', 'Bebidas alcoólicas', 'Bomboneire', 'Cigarro', 'Utilidades'],
+        };
+
+        const api = {
+            getCatalog: async (q) => {
+                console.log("API STUB: getCatalog", {q});
+                await new Promise(res => setTimeout(res, 200));
+                let products = MOCK_PRODUCTS.filter(p => p.active);
+                if(q?.q) {
+                    const searchTerm = q.q.toLowerCase();
+                    products = products.filter(p => 
+                        p.name.toLowerCase().includes(searchTerm) || 
+                        p.details?.some(d => d.code.toLowerCase().includes(searchTerm) || d.flavor.toLowerCase().includes(searchTerm))
+                    );
+                }
+                if(q?.category) {
+                        products = products.filter(p => p.category === q.category);
+                }
+                return { products, settings: MOCK_SETTINGS };
+            },
+        };
+    </script>
+    
+    <!-- =================================================================== -->
+    <!-- React Application                                                   -->
+    <!-- =================================================================== -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef, createContext, useContext } = React;
+        
+        // --- Icon Components ---
+        const IconLupa = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
+        const IconCerveja = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3.162A9.006 9.006 0 0 0 8 2v13.623a4.5 4.5 0 1 0 6 0V3.162zM14 2v1.162m-6 0V2m6 13.623a4.5 4.5 0 0 0-6 0m6 0V10m-6 5.623V10M8 5h6m-3 5V5"/></svg>;
+        const IconRefrigerante = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v2M12 20v2M5 12h14a2 2 0 0 1 0 4H5a2 2 0 0 1 0-4Z"/><path d="M5 12a2 2 0 0 0 0-4h14a2 2 0 0 0 0 4Z"/><path d="m12 6 2 2-4 4 2 2"/></svg>;
+        const IconBombom = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10.58c0-.55.44-1 1-1h.42c.55 0 1 .45 1 1v2.84c0 .55-.45 1-1 1h-.42c-.55 0-1-.45-1-1v-2.84zM16 10.58c0-.55.44-1 1-1h.42c.55 0 1 .45 1 1v2.84c0 .55-.45 1-1 1h-.42c-.55 0-1-.45-1-1v-2.84z"/><path d="M15.42 16.5H4.58C3.16 16.5 2 15.34 2 13.92V10.5c0-1.42 1.16-2.58 2.58-2.58h10.84C16.84 7.92 18 9.08 18 10.5v3.42c0 1.42-1.16 2.58-2.58 2.58z"/><path d="m14 8-2 2-2-2"/></svg>;
+        const IconCigarro = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="M19 8H7"/><path d="M16 4h-2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h2"/><path d="M22 8a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2V8Z"/></svg>;
+        const IconUtilidades = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>;
+        const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>;
+
+        const Spinner = () => (
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+        );
+        
+        const CATEGORY_ICONS = {
+          'Bebidas não alcoólicas': <IconRefrigerante />,
+          'Bebidas alcoólicas': <IconCerveja />,
+          'Bomboneire': <IconBombom />,
+          'Cigarro': <IconCigarro />,
+          'Utilidades': <IconUtilidades />,
+        };
+
+        // --- Helper Components for Image Generation ---
+        const PrintableProductCard = ({ product }) => (
+            <div style={{
+                backgroundColor: 'white',
+                borderRadius: '24px',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                fontFamily: "'Poppins', sans-serif",
+                color: '#111'
+            }}>
+                <div style={{ backgroundColor: '#f9fafb', padding: '1rem', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={product.imageUrl} alt={product.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                </div>
+                <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontWeight: '700', fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--brand-green)' }}>{product.name}</h3>
+                    <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.875rem' }}>
+                        {(product.details || []).map((detail, index) => (
+                            <div key={index} style={{ borderLeft: '4px solid #e5e7eb', paddingLeft: '0.75rem' }}>
+                                <div style={{ fontWeight: '600', color: '#4b5563' }}>{detail.flavor}</div>
+                                <div style={{ fontWeight: '700', color: '#1f2937' }}>Cód: {detail.code}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+
+        const PrintableCatalog = ({ groupedProducts }) => (
+            <div id="printable-catalog" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+                {groupedProducts.map(group => (
+                    <div 
+                        key={group.category}
+                        className="printable-category-section"
+                        data-category-name={group.category}
+                        style={{
+                            width: '1080px', /* Status width */
+                            padding: '48px',
+                            backgroundColor: '#f3f4f6', /* Light gray background */
+                            fontFamily: "'Poppins', sans-serif",
+                        }}
+                    >
+                        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                            <h2 style={{ fontSize: '48px', fontWeight: '700', color: 'var(--brand-green)' }}>{group.category}</h2>
+                        </div>
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(3, 1fr)',
+                            gap: '24px'
+                        }}>
+                            {group.products.map(p => <PrintableProductCard key={p.id} product={p} />)}
+                        </div>
+                         <div style={{ textAlign: 'center', marginTop: '48px' }}>
+                            <span style={{ fontSize: '36px', fontWeight: '700', color: 'var(--brand-green)' }}>Igor</span>
+                            <span style={{ fontSize: '36px', fontWeight: '700', color: 'var(--brand-red)' }}>Valen</span>
+                            <p style={{ fontSize: '24px', color: '#374151' }}>Distribuidora</p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+
+        const DownloadCatalogButton = ({ groupedProducts }) => {
+            const [isGenerating, setIsGenerating] = useState(false);
+            const [statusMessage, setStatusMessage] = useState('');
+
+            const handleDownload = async () => {
+                setIsGenerating(true);
+                setStatusMessage('Iniciando...');
+                
+                const printableElement = document.getElementById('printable-catalog');
+                if (!printableElement || !window.JSZip) {
+                    console.error("Elemento para impressão ou JSZip não encontrado.");
+                    setStatusMessage('Erro na preparação.');
+                    setTimeout(() => setIsGenerating(false), 3000);
+                    return;
+                }
+
+                const zip = new JSZip();
+                
+                try {
+                    const categorySections = printableElement.getElementsByClassName('printable-category-section');
+                    for (let i = 0; i < categorySections.length; i++) {
+                        const section = categorySections[i];
+                        const categoryName = section.dataset.categoryName || 'categoria';
+                        setStatusMessage(`Gerando ${i + 1}/${categorySections.length}: ${categoryName}`);
+                        
+                        await new Promise(resolve => setTimeout(resolve, 50));
+
+                        const canvas = await html2canvas(section, {
+                            scale: 2,
+                            backgroundColor: '#f3f4f6',
+                            useCORS: true,
+                            logging: false
+                        });
+                        
+                        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                        
+                        const fileName = `${categoryName.replace(/ /g, '_')}.png`;
+                        zip.file(fileName, blob);
+                    }
+
+                    setStatusMessage('Compactando...');
+                    const zipBlob = await zip.generateAsync({ type: "blob" });
+                    
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(zipBlob);
+                    link.download = 'catalogo_igorvalen.zip';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                    setStatusMessage('Download concluído!');
+
+                } catch (error) {
+                    console.error("Erro ao gerar as imagens:", error);
+                    setStatusMessage('Ocorreu um erro.');
+                } finally {
+                    setTimeout(() => {
+                        setIsGenerating(false);
+                        setStatusMessage('');
+                    }, 3000);
+                }
+            };
+
+            return (
+                <>
+                    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+                         {isGenerating && statusMessage && (
+                            <div className="bg-white text-sm text-gray-800 font-semibold px-4 py-2 rounded-full shadow-lg animate-pulse">
+                                {statusMessage}
+                            </div>
+                        )}
+                        <button
+                            onClick={handleDownload}
+                            disabled={isGenerating}
+                            className="bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-green-400 flex items-center justify-center self-end"
+                            style={{ width: '64px', height: '64px' }}
+                            aria-label="Baixar Catálogo em Imagens"
+                        >
+                            {isGenerating ? <Spinner /> : <IconDownload />}
+                        </button>
+                    </div>
+                    <PrintableCatalog groupedProducts={groupedProducts} />
+                </>
+            );
+        };
+
+        // --- Page Components ---
+        const Header = () => {
+            return (
+                <header className="sticky top-0 z-40" style={{backgroundColor: 'var(--brand-green)'}}>
+                    <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-24">
+                        <div className="bg-white px-6 py-2 rounded-2xl shadow-lg">
+                            <a href="#" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="flex items-baseline">
+                                <span className="text-3xl font-bold" style={{color: 'var(--brand-green)'}}>Igor</span>
+                                <span className="text-3xl font-bold" style={{color: 'var(--brand-red)'}}>Valen</span>
+                            </a>
+                            <span className="block text-sm -mt-1 font-medium text-gray-800 text-center">Distribuidora</span>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        const ProductCard = ({ product }) => {
+            return (
+                <div className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:scale-105">
+                    <div className="bg-gray-50 p-4 relative h-48 flex items-center justify-center">
+                        <img loading="lazy" src={product.imageUrl} alt={product.name} className="max-w-full max-h-full object-contain" />
+                    </div>
+                    <div className="p-4 flex-grow flex flex-col">
+                        <h3 className="font-bold text-lg mb-3" style={{color: 'var(--brand-green)'}}>{product.name}</h3>
+                        <div className="space-y-2 text-sm mt-auto">
+                            {(product.details || []).map((detail, index) => (
+                                <div key={index} className="border-l-4 border-gray-200 pl-3">
+                                     <div className="font-semibold text-gray-600">{detail.flavor}</div>
+                                     <div className="font-bold text-gray-800">Cód: {detail.code}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        const HomePage = () => {
+            const [catalog, setCatalog] = useState({ products: [], settings: { categoriesOrder: [] } });
+            const [loading, setLoading] = useState(true);
+            const [query, setQuery] = useState('');
+            const [activeCategory, setActiveCategory] = useState(null);
+
+            useEffect(() => {
+                setLoading(true);
+                api.getCatalog({ q: query, category: activeCategory }).then(data => {
+                    setCatalog(data);
+                    setLoading(false);
+                });
+            }, [query, activeCategory]);
+            
+            const groupedProducts = catalog.settings.categoriesOrder
+                .map(category => ({
+                    category,
+                    products: catalog.products.filter(p => p.category === category)
+                }))
+                .filter(group => group.products.length > 0);
+
+            return (
+                <div className="container mx-auto p-4 sm:p-6 lg:p-8">
+                    {/* Certifications Section */}
+                    <div className="my-10 text-center">
+                        <h2 className="text-3xl font-bold mb-2 text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.5)'}}>
+                            Certificações
+                        </h2>
+                        <p className="max-w-2xl mx-auto mb-8 text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.4)'}}>
+                            Seguimos rigorosas recomendações em nosso processo de fabricação e rígido controle de qualidade.
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div className="bg-white p-6 rounded-3xl shadow-lg text-center">
+                                <img src="https://group-ism.com/br/wp-content/uploads/2023/07/ism-9001.png" alt="[Imagem do selo ISO 9001]" className="h-28 mx-auto mb-4 rounded-xl"/>
+                                <h3 className="font-bold text-lg text-gray-800">ISO 9001</h3>
+                                <p className="text-sm text-gray-600">Norma internacional centrada na gestão da qualidade de um sistema efetivo, e melhoria da qualidade dos produtos e serviços.</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-3xl shadow-lg text-center">
+                                <img src="https://group-ism.com/br/wp-content/uploads/2023/07/ism-14001.png" alt="[Imagem do selo ISO 14001]" className="h-28 mx-auto mb-4 rounded-xl"/>
+                                <h3 className="font-bold text-lg text-gray-800">ISO 14001</h3>
+                                <p className="text-sm text-gray-600">Norma internacional focada no compromisso da organização com a proteção do meio ambiente por meio da gestão dos riscos ambientais.</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-3xl shadow-lg text-center">
+                                <img src="https://group-ism.com/br/wp-content/uploads/2023/07/ism-45001-ES.png" alt="[Imagem do selo ISO 45001]" className="h-28 mx-auto mb-4 rounded-xl"/>
+                                <h3 className="font-bold text-lg text-gray-800">ISO 45001</h3>
+                                <p className="text-sm text-gray-600">Norma internacional que proporciona as condições de trabalho seguras e saudáveis para prevenir os danos e deterioração da saúde.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Banner Section */}
+                    <div className="mb-10 rounded-3xl shadow-lg overflow-hidden">
+                        <img 
+                            src="https://i.ibb.co/yFDqWmt0/IMG-0854.jpg" 
+                            alt="Banner promocional" 
+                            className="w-full h-auto"
+                            onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/1200x300/1f2937/ffffff?text=Banner+Indisponível'; }}
+                        />
+                    </div>
+
+                    {/* Controls Panel */}
+                    <div className="panel p-6 mb-10">
+                        <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+                             <button onClick={() => setActiveCategory(null)} className={`flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${!activeCategory ? 'bg-green-600 text-white shadow-lg scale-105' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>Todas</button>
+                             {catalog.settings.categoriesOrder.map(cat => (
+                                 <button key={cat} onClick={() => setActiveCategory(cat)} className={`flex items-center gap-2 px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${activeCategory === cat ? 'bg-green-600 text-white shadow-lg scale-105' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                                    {CATEGORY_ICONS[cat]}
+                                    {cat}
+                                 </button>
+                             ))}
+                        </div>
+                        <div className="relative">
+                            <input type="text" placeholder="Buscar por nome, categoria ou código..." onChange={(e) => setQuery(e.target.value)} className="w-full pl-5 pr-16 py-4 bg-gray-50 border-2 border-gray-200 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                            <button className="absolute top-1/2 right-3 transform -translate-y-1/2 bg-green-600 text-white font-semibold p-3 rounded-full hover:bg-green-700 transition-colors">
+                                <IconLupa />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Products Section */}
+                    {loading ? <div className="text-center text-white text-2xl font-bold">Carregando...</div> : (
+                        groupedProducts.map(group => {
+                            const hasWaveBackground = ['Bebidas não alcoólicas', 'Bomboneire', 'Utilidades'].includes(group.category);
+                            const categoryContent = (
+                                <>
+                                    <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3 justify-center" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.5)'}}>
+                                        {CATEGORY_ICONS[group.category]}
+                                        {group.category}
+                                    </h2>
+                                    <div className="bg-white bg-opacity-70 backdrop-blur-sm rounded-3xl shadow-lg p-4 sm:p-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                                            {group.products.map(p => <ProductCard key={p.id} product={p} />)}
+                                        </div>
+                                    </div>
+                                </>
+                            );
+
+                            return (
+                                <React.Fragment key={group.category}>
+                                    {group.category === 'Bebidas alcoólicas' && (
+                                        <div className="mb-12 relative">
+                                            <div className="absolute top-0 left-4 bg-red-600 text-white font-bold py-2 px-4 rounded-b-xl z-10 shadow-lg transform -translate-y-2">
+                                                NOVIDADE
+                                            </div>
+                                            <div className="rounded-3xl shadow-lg overflow-hidden mt-4">
+                                                <img 
+                                                    src="https://i.ibb.co/Vp9Pshb4/IMG-0863.jpg" 
+                                                    alt="Novas Cervejas" 
+                                                    className="w-full h-auto"
+                                                    onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/1200x300/1f2937/ffffff?text=Banner+Indisponível'; }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="mb-12">
+                                        {hasWaveBackground ? (
+                                            <div className="category-wave-wrapper">
+                                                <div className="category-content">{categoryContent}</div>
+                                            </div>
+                                        ) : (
+                                            categoryContent
+                                        )}
+                                    </div>
+                                </React.Fragment>
+                            )
+                        })
+                    )}
+                    <DownloadCatalogButton groupedProducts={groupedProducts} />
+                </div>
+            );
+        };
+        
+        // --- Main App Component ---
+        const App = () => {
+            return (
+                <div>
+                    <Header />
+                    <main>
+                       <HomePage />
+                    </main>
+                </div>
+            );
+        };
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>
