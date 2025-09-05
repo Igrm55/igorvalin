@@ -1,0 +1,30 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="150"
+  height="60"
+  viewBox="0 0 150 60"
+>
+  <rect width="150" height="60" rx="10" fill="#fff" stroke="#2e7d32" />
+  <text
+    x="50%"
+    y="35%"
+    dominant-baseline="middle"
+    text-anchor="middle"
+    font-family="Arial"
+    font-size="24"
+  >
+    <tspan fill="#2e7d32">Igor</tspan>
+    <tspan fill="#c62828">Valen</tspan>
+  </text>
+  <text
+    x="50%"
+    y="65%"
+    dominant-baseline="middle"
+    text-anchor="middle"
+    font-family="Arial"
+    font-size="14"
+    fill="#333"
+  >
+    Distribuidora
+  </text>
+</svg>

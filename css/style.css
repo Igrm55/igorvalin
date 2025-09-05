@@ -15,7 +15,37 @@ body {
   background-color: var(--primary-green);
   color: #fff;
   padding: 1rem;
+ codex/create-new-product-catalog-from-scratch-al1vk9
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  height: 50px;
+}
+
+.category-nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.category-nav button {
+  background-color: var(--primary-red);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.category-nav button:hover {
+  background-color: var(--primary-green);
+
   text-align: center;
+ main
 }
 
 .product-grid {
@@ -60,6 +90,8 @@ body {
 .product-price {
   font-weight: bold;
   color: var(--primary-red);
+ codex/create-new-product-catalog-from-scratch-al1vk9
+
   margin-bottom: 1rem;
 }
 
@@ -75,4 +107,5 @@ body {
 
 .product-card button:hover {
   background-color: var(--primary-red);
+ main
 }
