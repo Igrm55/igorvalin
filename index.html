@@ -726,6 +726,9 @@
         
         const HomePage = ({ loading, groupedProducts, allCategories, activeCategory, setActiveCategory, setQuery, onImageClick, query }) => {
             const searchInputRef = useRef(null);
+            const scrollPosRef = useRef(0);
+            const debounceTimeoutRef = useRef(null);
+            window.scrollPosRef = scrollPosRef;
 
             const handleClearSearch = () => {
                 setQuery('');
@@ -822,7 +825,18 @@
                                  })}
                              </div>
                              <div className="relative flex items-center">
-                                 <input ref={searchInputRef} type="text" placeholder="Buscar por nome ou sabor..." onChange={(e) => setQuery(e.target.value)} className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500" />
+                                 <input
+                                     ref={searchInputRef}
+                                     type="text"
+                                     placeholder="Buscar por nome ou sabor..."
+                                     onChange={(e) => {
+                                         scrollPosRef.current = window.scrollY;
+                                         const value = e.target.value;
+                                         if (debounceTimeoutRef.current) clearTimeout(debounceTimeoutRef.current);
+                                         debounceTimeoutRef.current = setTimeout(() => setQuery(value), 300);
+                                     }}
+                                     className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                                 />
                                   <button className="absolute right-2 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors">
                                      <IconLupa />
                                  </button>
@@ -970,6 +984,9 @@
                 setLoading(true);
                 api.getCatalog({ q: query, category: activeCategory }).then(data => {
                     setCatalog(data);
+                    if (window.scrollPosRef) {
+                        window.scrollTo({ top: window.scrollPosRef.current, behavior: 'instant' });
+                    }
                     setLoading(false);
                 });
             }, [query, activeCategory]);
