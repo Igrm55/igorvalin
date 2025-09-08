@@ -633,6 +633,7 @@
         };
 
         // --- Helper Components for Image Generation ---
+ codex/update-filter-clear-functionality-a1x80h
         const PrintableProductCard = ({ product }) => {
             const imageHeight = LARGE_PRODUCT_NAMES.has(product.name)
                 ? '250px'
@@ -662,6 +663,30 @@
                                 </div>
                             ))}
                         </div>
+
+        const PrintableProductCard = ({ product }) => (
+            <div style={{
+                backgroundColor: 'white',
+                borderRadius: '24px',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                fontFamily: "'Poppins', sans-serif",
+                color: '#111'
+            }}>
+                <div style={{ backgroundColor: '#f9fafb', padding: '1rem', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <img src={product.imageUrl} alt={product.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                </div>
+                <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontWeight: '700', fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--brand-green)' }}>{product.name}</h3>
+                    <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.875rem' }}>
+                        {(product.details || []).map((detail, index) => (
+                            <div key={index} style={{ borderLeft: '4px solid #e5e7eb', paddingLeft: '0.75rem' }}>
+                                <div style={{ fontWeight: '600', color: '#4b5563' }}>{detail.flavor}</div>
+                            </div>
+                        ))}
+ main
                     </div>
                 </div>
             );
@@ -838,7 +863,11 @@
                     className="bg-gradient-to-b from-white to-gray-50 rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
                     onClick={() => onImageClick(product.imageUrl)}
                 >
+ codex/update-filter-clear-functionality-a1x80h
                     <div className={`relative ${getImageHeightClass(product.name)} overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2`}>
+
+                    <div className="relative h-56 sm:h-64 overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2">
+ main
                         <img
                             loading="lazy"
                             src={product.imageUrl}
@@ -874,11 +903,28 @@
                 setActiveCategory(null);
                 if (searchInputRef.current) {
                     searchInputRef.current.value = '';
+ codex/update-filter-clear-functionality-a1x80h
                     searchInputRef.current.focus();
                 }
                 requestAnimationFrame(() => {
                     window.scrollTo({ top: currentScroll, left: 0 });
                 });
+
+ codex/update-filter-clear-functionality-zl9bhc
+                    try {
+                        searchInputRef.current.focus({ preventScroll: true });
+                    } catch {
+                        searchInputRef.current.focus();
+                    }
+
+                    // Keep the user focused on the search field after clearing
+                    searchInputRef.current.focus();
+                    // Ensure the search bar stays in view without jumping to the very top
+                    searchInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ main
+                }
+                window.scrollTo({ top: currentScroll });
+ main
             }
 
             return (
