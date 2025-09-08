@@ -405,6 +405,7 @@
     <!-- React Application                                                   -->
     <!-- =================================================================== -->
     <script type="text/babel">
+        document.addEventListener("DOMContentLoaded", () => {
         const { useState, useEffect, useRef } = React;
         
         // --- Custom Hook for Scroll Animations ---
@@ -466,6 +467,150 @@
           'Outros': { src: "https://i.ibb.co/HLMS4Dh5/reuso.png", alt: "Ícone de outros produtos" },
         };
 
+        const LARGE_PRODUCT_NAMES = new Set([
+            "Refrigerante Goob 1L",
+            "Refrigerante Goob 230ML",
+            "Energético Ener Up 2L",
+            "Energético Ener Up 250ML",
+            "Guaraná + Açaí Guaran Up de Copo 290ML",
+            "Guaraná + Açaí Guaran Up 200ML",
+            "Suco de Caixinha Yulo Tetra Park 200ML",
+            "Suco Yulo 1,5L Frutas Cítricas",
+            "Suco Yulo 400ML",
+            "Chá Gelado Drink T 300ML",
+            "Energético Ener Up lata 269 ML",
+            "Pitú Litro Completa (Sem devolver o Litro)",
+            "Pitú Devolvendo o Litro",
+            "Pitú de Garrafa 600ML",
+            "Pitú Lata 473ML",
+            "Pitú Lata 350ML",
+            "Pitú Lata Sabor Limão e Mel 350ML",
+            "Pitú Lata Sabor Caju 350ML",
+            "Pitú Lata Sabor Banana 350 ML",
+            "Ice Pitú 275 ML",
+            "Cachaça Paratudo 900ML",
+            "Cachaça 51 de 965 ML",
+            "Cachaça Asa Branca 900ML",
+            "Cachaça Caninha Vida Nova 480 ML",
+            "Cachaça Asa Branca Jequitibá 980 ML",
+            "Cachaça Seleta 1 L",
+            "Cachaça Velho Barreiro 910 ML",
+            "Cachaça 1883 De Alambique Ouro 980 ML",
+            "Vodka Slova Tradicional 965 ML",
+            "Vodka Slova Sabor Limão 965 ML",
+            "Vodka Slova Blueberry 965 ML",
+            "Vodka Slova Sabor Frutas Vermelhas 965 ML",
+            "Vodka Newsnoff 960 ML",
+            "Vodka Newsnoff Sabor Limão 960 ML",
+            "Vodka Newsnoff Sabor Frutas Vermelhas 960 ML",
+            "Vodka Natasha 900 ML",
+            "Vodka Smirnoff 1 L",
+            "Vodka Absolut 1 L",
+            "Whisky Black Stone 1L (Com Copo)",
+            "Whisky Old Par 1L",
+            "Whisky Jack Daniel’s 1L",
+            "Whisky Jack Daniel’s Maçã Verde 1 L",
+            "Whisky Jack Daniel’s Mel 1 L",
+            "Whisky Red Label 1L",
+            "Whisky Black Label 1 L",
+            "Whisky Teachers 1L",
+            "Whisky Passport Scotch 1L",
+            "Whisky Chanceler 1L",
+            "Whisky Ballantine’s 1L",
+            "Whisky Black & White 1 L",
+            "Gin Tanqueray London Dry 1 L",
+            "Gin Beefeater London Dry 900 ML",
+            "Genebra Dubar Zora 960 ML",
+            "Geneva Steinhaeger Becosa 980 ML",
+            "Ice Syn Lemon Ice 300ML",
+            "Ice Glow 275 ML (Garrafa de Vidro)",
+            "Vinho Quinta do Morgado Suave 750ML",
+            "Vinho Cantina da Serra 1L",
+            "Vinho Pérgula Tinto Suave 1L",
+            "Aperitivo Campari 900ML",
+            "Aperitivo Jurubeba Leão do Norte 600 ML",
+            "Conhaque Dramontt 900ML",
+            "Conhaque Dreher 1L",
+            "Conhaque Domecq Coquetel Composto 1 L",
+            "Licor Menta São Paulo 960ML",
+            "Catuaba Vida Nova 900ML",
+            "Alcatrão São João da Barra 900 ML",
+            "Bebida alcoólica Gengibre Vida Nova Verde 900ML",
+            "Canelinha da Rocha 900ML",
+            "Bala Icekiss Sortida 500G",
+            "Bala Butter Toffees 500G",
+            "Bala Santa Fé Mastigável Yogurt Morango 500G",
+            "Bala Santa Fé Mastigável Sortida Frutas 500G",
+            "Balinhas Coração Morango Florestal 500G",
+            "Bala Mel e Gengibre",
+            "Bala de Hortelã Recheada",
+            "Drops Halls",
+            "Drops Icekiss Sortido",
+            "Bala de Caramelo",
+            "Bala Coffee King",
+            "Bala Azedinha",
+            "Bala Yogurte Sortido",
+            "Drops Freegells",
+            "Chicle Big Big",
+            "Chiclete Trident",
+            "Chiclete Cliss",
+            "Chiclete Danclets Tutti Frutti",
+            "Chiclete Blong",
+            "Goma Tubo Gurt",
+            "Goma Tubo Frutas Sortidas",
+            "Pirulito Megalito Pinta Língua",
+            "Pirulito Big Pop Yogurt Rech Mastigável 500 G",
+            "Pirulito Big Pop Frutas Recheado Mastigável 500 G",
+            "Pirulito Megalito Sortido Berbau 1 KG",
+            "Pirulito Pop Mix",
+            "Pirulito Yogo Pop Sortido",
+            "Biscoito Recheado Fofinho",
+            "Mini Bolinho Capri 35G",
+            "Confeito Mamadeira",
+            "Confeito Skatinho",
+            "Confeito Catavento",
+            "Confeito Carinhas",
+            "Confeito Chuquinhas",
+            "Chup Chup Doce de Leite 750G",
+            "Geladão Ice Pop Sortido",
+            "Geladinho Ice Pop Sortido",
+            "Chocolate Puríssimo",
+            "Doce Balsamo Pacote com 50 unidades",
+            "Pé de Moleque Pacote com 50 unidades",
+            "Pé de Moleque Pote com 50",
+            "Cocada Branca",
+            "Cocada Morena",
+            "Goiabada de Pacote",
+            "Goiabada de Pote",
+            "Bananada de Pacote",
+            "Bananada de Pote",
+            "Geleia de pote",
+            "Geleia Pacote",
+            "Salgadinho Goxtoso 28G",
+            "Salgadinho Pimentinha Goxtoso 40G",
+            "Pipoca Doce Goxtoso 40G",
+            "Salgadinho Batata Plus 40G",
+            "Salgadinho Agitos 85G",
+            "Salgadinho Pimentinha Sortida Agitos 40G",
+            "Salgadinho Agitos 25G",
+            "Amendoim Japonês 1KG",
+            "Mendozitos Japonês 30G",
+            "Amendoim Crocanty Pimenta Mexicana 30 G",
+            "Amendoim Crocante Bacon 30G",
+            "Amendoim Cebola e Salsa 30G",
+            "Torresmo Pé de Serra",
+            "Pururuca Pé de Serra",
+            "Fumo Coringa",
+            "Papel para Fumo Bom de Fogo",
+            "Cigarro de Palha Palheiro",
+            "Seda para Fumo Zomo",
+            "Fumo Meliá"
+        ]);
+
+        const SMALL_PRODUCT_NAMES = new Set([
+            "Glow Ice 269ML (Lata)"
+        ]);
+
         const ImageModal = ({ imageUrl, onClose }) => {
             if (!imageUrl) return null;
 
@@ -489,32 +634,39 @@
         };
 
         // --- Helper Components for Image Generation ---
-        const PrintableProductCard = ({ product }) => (
-            <div style={{
-                backgroundColor: 'white',
-                borderRadius: '24px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                fontFamily: "'Poppins', sans-serif",
-                color: '#111'
-            }}>
-                <div style={{ backgroundColor: '#f9fafb', padding: '1rem', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <img src={product.imageUrl} alt={product.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
-                </div>
-                <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h3 style={{ fontWeight: '700', fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--brand-green)' }}>{product.name}</h3>
-                    <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.875rem' }}>
-                        {(product.details || []).map((detail, index) => (
-                            <div key={index} style={{ borderLeft: '4px solid #e5e7eb', paddingLeft: '0.75rem' }}>
-                                <div style={{ fontWeight: '600', color: '#4b5563' }}>{detail.flavor}</div>
-                            </div>
-                        ))}
+        const PrintableProductCard = ({ product }) => {
+            const imageHeight = LARGE_PRODUCT_NAMES.has(product.name)
+                ? '250px'
+                : SMALL_PRODUCT_NAMES.has(product.name)
+                    ? '150px'
+                    : '200px';
+            return (
+                <div style={{
+                    backgroundColor: 'white',
+                    borderRadius: '24px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    fontFamily: "'Poppins', sans-serif",
+                    color: '#111'
+                }}>
+                    <div style={{ backgroundColor: '#f9fafb', padding: '1rem', height: imageHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img src={product.imageUrl} alt={product.name} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                    </div>
+                    <div style={{ padding: '1rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                        <h3 style={{ fontWeight: '700', fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--brand-green)' }}>{product.name}</h3>
+                        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.875rem' }}>
+                            {(product.details || []).map((detail, index) => (
+                                <div key={index} style={{ borderLeft: '4px solid #e5e7eb', paddingLeft: '0.75rem' }}>
+                                    <div style={{ fontWeight: '600', color: '#4b5563' }}>{detail.flavor}</div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        };
 
         const PrintableCatalog = ({ groupedProducts }) => (
             <div id="printable-catalog" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
@@ -666,7 +818,7 @@
 
         const ProductCardSkeleton = () => (
             <div className="bg-white rounded-3xl shadow-md overflow-hidden animate-pulse">
-                <div className="bg-gray-200 h-48 w-full"></div>
+                <div className="bg-gray-200 h-56 sm:h-64 w-full"></div>
                 <div className="p-4">
                     <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
@@ -675,18 +827,24 @@
             </div>
         );
 
+        const getImageHeightClass = name => {
+            if (LARGE_PRODUCT_NAMES.has(name)) return 'h-80 sm:h-96';
+            if (SMALL_PRODUCT_NAMES.has(name)) return 'h-48 sm:h-56';
+            return 'h-56 sm:h-64';
+        };
+
         const ProductCard = ({ product, onImageClick }) => {
             return (
-                <div 
-                    className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
+                <div
+                    className="bg-gradient-to-b from-white to-gray-50 rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
                     onClick={() => onImageClick(product.imageUrl)}
                 >
-                    <div className="relative h-48 overflow-hidden bg-white flex items-center justify-center p-2">
-                        <img 
-                            loading="lazy" 
-                            src={product.imageUrl} 
-                            alt={product.name} 
-                            className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105" 
+                    <div className={`relative ${getImageHeightClass(product.name)} overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2`}>
+                        <img
+                            loading="lazy"
+                            src={product.imageUrl}
+                            alt={product.name}
+                            className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
                         />
                     </div>
 
@@ -712,11 +870,16 @@
             const searchInputRef = useRef(null);
 
             const handleClearSearch = () => {
+                const currentScroll = window.scrollY;
                 setQuery('');
                 setActiveCategory(null);
-                if(searchInputRef.current) {
+                if (searchInputRef.current) {
                     searchInputRef.current.value = '';
+                    searchInputRef.current.focus();
                 }
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: currentScroll, left: 0 });
+                });
             }
 
             return (
@@ -744,7 +907,7 @@
                                     <p className="max-w-2xl mx-auto mb-8 text-white" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.4)'}}>
                                         Seguimos rigorosas recomendações em nosso processo de fabricação e rígido controle de qualidade.
                                     </p>
-                                    <div className="grid grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                         <div className="text-center flex flex-col items-center p-2">
                                             <img src="https://group-ism.com/br/wp-content/uploads/2023/07/ism-9001.png" alt="Selo ISO 9001" className="h-24 sm:h-32 mb-4"/>
                                             <h3 className="font-bold text-lg text-white" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.7)'}}>ISO 9001</h3>
@@ -806,7 +969,17 @@
                                  })}
                              </div>
                              <div className="relative flex items-center">
-                                 <input ref={searchInputRef} type="text" placeholder="Buscar por nome ou sabor..." onChange={(e) => setQuery(e.target.value)} className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500" />
+                                <input
+                                    ref={searchInputRef}
+                                    type="text"
+                                    placeholder="Buscar por nome ou sabor..."
+                                    onChange={(e) => {
+                                        setQuery(e.target.value);
+                                        // Whenever a new search is performed, show all categories
+                                        setActiveCategory(null);
+                                    }}
+                                    className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                                />
                                   <button className="absolute right-2 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors">
                                      <IconLupa />
                                  </button>
@@ -882,11 +1055,11 @@
 
                                 <div className="bg-white rounded-3xl shadow-lg p-4 sm:p-6">
                                     {loading ? (
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 md:gap-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
                                             {Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)}
                                         </div>
                                     ) : !group.products.length ? null : (
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 md:gap-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
                                             {group.products.map(p => <ProductCard key={p.id} product={p} onImageClick={onImageClick} />)}
                                         </div>
                                     )}
@@ -991,6 +1164,7 @@
             <App />,
             document.getElementById('root')
         );
+        });
     </script>
 </body>
 </html>
