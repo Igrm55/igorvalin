@@ -6,6 +6,24 @@
     <title>Catálogo - IgorValen Distribuidora</title>
     
     <!-- Tailwind CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-green': '#0f8a3a',
+                        'brand-green-dark': '#0b5d29',
+                        'brand-red': '#de1f36',
+                        'brand-soft': '#f3f4f6',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- React & ReactDOM -->
@@ -38,8 +56,16 @@
 
         html, body {
             min-height: 100%;
-            font-family: 'Poppins', sans-serif;
             scroll-behavior: smooth;
+        }
+
+        .dark {
+            --brand-green: #0b5d29;
+            --brand-green-darker: #064e24;
+            --brand-red: #a51629;
+            --text: #f3f4f6;
+            --bg-soft: #1f2937;
+            color-scheme: dark;
         }
 
         body {
@@ -209,7 +235,7 @@
         }
     </style>
 </head>
-<body>
+<body class="font-sans text-gray-900 dark:text-gray-100">
     <div id="root"></div>
     <div class="wave-container"></div>
 
@@ -466,10 +492,11 @@
         const IconInstagram = ({size = 24}) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
         
         const CategoryIcon = ({ src, alt, isActive, size = 'w-5 h-5' }) => (
-            <img 
-                src={src} 
-                alt={alt} 
-                className={`${size} object-contain transition-all duration-200 ${isActive ? 'filter brightness-0 invert' : ''}`} 
+            <img
+                loading="lazy"
+                src={src}
+                alt={alt}
+                className={`${size} object-contain transition-all duration-200 ${isActive ? 'filter brightness-0 invert' : ''}`}
             />
         );
 
@@ -480,6 +507,23 @@
           'Bomboneire': { src: "https://i.ibb.co/TzXk30F/doces-embrulhados.png", alt: "Ícone de bombom" },
           'Cigarro': { src: "https://i.ibb.co/Xx3KRHhk/cigarro-1.png", alt: "Ícone de cigarro" },
           'Outros': { src: "https://i.ibb.co/HLMS4Dh5/reuso.png", alt: "Ícone de outros produtos" },
+        };
+
+        const DarkModeToggle = () => {
+            const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+            const toggleDark = () => {
+                document.documentElement.classList.toggle('dark');
+                setIsDark(!isDark);
+            };
+            return (
+                <button
+                    onClick={toggleDark}
+                    className="bg-white text-brand-green dark:text-brand-red rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-red"
+                    aria-label="Alternar modo escuro"
+                >
+                    {isDark ? '🌙' : '☀️'}
+                </button>
+            );
         };
 
         const ImageModal = ({ imageUrl, onClose }) => {
@@ -653,26 +697,27 @@
         // --- Page Components ---
         const Header = ({ groupedProducts }) => {
             return (
-                <header className="sticky top-0 z-40" style={{backgroundColor: 'var(--brand-green)'}}>
+                <header className="sticky top-0 z-40 bg-brand-green dark:bg-brand-green-dark">
                     <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-24">
                         <div className="flex-1 flex justify-start">
                              <div className="bg-white px-4 sm:px-6 py-2 rounded-2xl shadow-lg">
                                 <a href="#" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="flex items-baseline">
-                                    <span className="text-xl sm:text-2xl font-bold" style={{color: 'var(--brand-green)'}}>Igor</span>
-                                    <span className="text-xl sm:text-2xl font-bold" style={{color: 'var(--brand-red)'}}>Valen</span>
+                                    <span className="text-xl sm:text-2xl font-bold text-brand-green">Igor</span>
+                                    <span className="text-xl sm:text-2xl font-bold text-brand-red">Valen</span>
                                 </a>
-                                <span className="block text-xs sm:text-sm -mt-1 font-medium text-gray-800 text-center">Distribuidora</span>
+                                <span className="block text-xs sm:text-sm -mt-1 font-medium text-gray-800 dark:text-gray-200 text-center">Distribuidora</span>
                             </div>
                         </div>
                         
                         <div className="flex-1 flex justify-center items-center px-2">
-                             <a href="https://www.instagram.com/Goob_irece" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white transition-all duration-300 transform hover:scale-105">
+                             <a href="https://www.instagram.com/Goob_irece" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-brand-red">
                                 <IconInstagram size={28} />
                                 <span className="font-bold text-base sm:text-xl tracking-wider whitespace-nowrap">@Goob_irece</span>
                             </a>
                         </div>
 
-                        <div className="flex-1 flex justify-end">
+                        <div className="flex-1 flex justify-end items-center gap-2">
+                            <DarkModeToggle />
                             <DownloadCatalogButton groupedProducts={groupedProducts} />
                         </div>
                     </div>
@@ -692,33 +737,57 @@
         );
 
         const ProductCard = ({ product, onImageClick }) => {
+            const handleKeyDown = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    onImageClick(product.imageUrl);
+                }
+            };
             return (
-                <div 
-                    className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
+                <div
+                    className="bg-white dark:bg-gray-800 rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer focus:outline-none focus:ring-4 focus:ring-brand-red"
                     onClick={() => onImageClick(product.imageUrl)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={handleKeyDown}
                 >
-                    <div className="relative h-48 overflow-hidden bg-white flex items-center justify-center p-2">
-                        <img 
-                            loading="lazy" 
-                            src={product.imageUrl} 
-                            alt={product.name} 
+                    <div className="relative h-48 overflow-hidden bg-white dark:bg-gray-800 flex items-center justify-center p-2">
+                        <img
+                            loading="lazy"
+                            src={product.imageUrl}
+                            alt={product.name}
                             className={`max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105 ${product.imageClass || ''}`}
                         />
                     </div>
 
                     <div className="p-4 flex-grow flex flex-col">
-                        <h3 className="font-bold text-lg mb-2 text-green-800 group-hover:text-green-600 transition-colors duration-300">{product.name}</h3>
+                        <h3 className="font-bold text-lg mb-2 text-brand-green-dark dark:text-brand-green group-hover:text-brand-green transition-colors duration-300">{product.name}</h3>
                         <div className="flex-grow"></div>
                         {(product.details && product.details.length > 0) && (
                             <div className="mt-2">
-                                <p className="font-bold text-sm" style={{color: 'var(--brand-red)'}}>
+                                <p className="font-bold text-sm text-brand-red">
                                      {product.details.length > 1 ? 'Sabores:' : 'Sabor:'}
                                 </p>
-                                <p className="text-sm text-gray-700 leading-tight">
+                                <p className="text-sm text-gray-700 dark:text-gray-300 leading-tight">
                                     {(product.details || []).map(detail => detail.flavor).join(', ')}
                                 </p>
                             </div>
                         )}
+                        <div className="mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                                className="flex-1 bg-brand-green text-white text-sm py-2 rounded-lg hover:bg-brand-green-dark focus:outline-none focus:ring-2 focus:ring-brand-red"
+                                onClick={(e) => { e.stopPropagation(); onImageClick(product.imageUrl); }}
+                                aria-label="Ver detalhes"
+                            >
+                                Ver
+                            </button>
+                            <button
+                                className="flex-1 bg-brand-red text-white text-sm py-2 rounded-lg hover:bg-brand-red/80 focus:outline-none focus:ring-2 focus:ring-brand-green"
+                                onClick={(e) => { e.stopPropagation(); alert('Produto adicionado ao carrinho!'); }}
+                                aria-label="Adicionar ao carrinho"
+                            >
+                                Comprar
+                            </button>
+                        </div>
                     </div>
                 </div>
             );
@@ -744,11 +813,11 @@
                         <>
                             <AnimatedSection>
                                 <div className="my-8 sm:my-10 mb-12 sm:mb-16">
-                                    <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-lg text-center">
-                                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4" style={{color: 'var(--brand-green)'}}>
+                                    <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-lg text-center">
+                                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-brand-green dark:text-brand-green">
                                             Bem-vindo ao nosso Catálogo
                                         </h1>
-                                        <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-gray-600">
+                                        <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
                                             Explore nossa variedade de produtos de alta qualidade, prontos para atender você.
                                         </p>
                                     </div>
@@ -912,11 +981,11 @@
 
                                 <div className="bg-white rounded-3xl shadow-lg p-4 sm:p-6">
                                     {loading ? (
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 md:gap-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                                             {Array.from({ length: 4 }).map((_, i) => <ProductCardSkeleton key={i} />)}
                                         </div>
                                     ) : !group.products.length ? null : (
-                                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4 md:gap-6">
+                                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
                                             {group.products.map(p => <ProductCard key={p.id} product={p} onImageClick={onImageClick} />)}
                                         </div>
                                     )}
@@ -949,8 +1018,8 @@
                     {!query && (
                         <AnimatedSection>
                             <div className="my-10">
-                                <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-lg text-center border-4 border-green-600">
-                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4" style={{color: 'var(--brand-green)'}}>
+                                <div className="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-3xl shadow-lg text-center border-4 border-brand-green dark:border-brand-green-dark">
+                                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 text-brand-green">
                                         Obrigado pela sua visita!
                                     </h2>
                                     <p className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
