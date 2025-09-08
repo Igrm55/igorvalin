@@ -405,6 +405,7 @@
     <!-- React Application                                                   -->
     <!-- =================================================================== -->
     <script type="text/babel">
+        document.addEventListener("DOMContentLoaded", () => {
         const { useState, useEffect, useRef } = React;
         
         // --- Custom Hook for Scroll Animations ---
@@ -633,7 +634,10 @@
         };
 
         // --- Helper Components for Image Generation ---
+ codex/update-filter-clear-functionality-k44hqf
+
  codex/update-filter-clear-functionality-a1x80h
+ main
         const PrintableProductCard = ({ product }) => {
             const imageHeight = LARGE_PRODUCT_NAMES.has(product.name)
                 ? '250px'
@@ -663,6 +667,8 @@
                                 </div>
                             ))}
                         </div>
+ codex/update-filter-clear-functionality-k44hqf
+
 
         const PrintableProductCard = ({ product }) => (
             <div style={{
@@ -686,6 +692,7 @@
                                 <div style={{ fontWeight: '600', color: '#4b5563' }}>{detail.flavor}</div>
                             </div>
                         ))}
+ main
  main
                     </div>
                 </div>
@@ -863,10 +870,14 @@
                     className="bg-gradient-to-b from-white to-gray-50 rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
                     onClick={() => onImageClick(product.imageUrl)}
                 >
+ codex/update-filter-clear-functionality-k44hqf
+                    <div className={`relative ${getImageHeightClass(product.name)} overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2`}>
+
  codex/update-filter-clear-functionality-a1x80h
                     <div className={`relative ${getImageHeightClass(product.name)} overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2`}>
 
                     <div className="relative h-56 sm:h-64 overflow-hidden bg-white flex items-center justify-center p-1 sm:p-2">
+ main
  main
                         <img
                             loading="lazy"
@@ -903,6 +914,13 @@
                 setActiveCategory(null);
                 if (searchInputRef.current) {
                     searchInputRef.current.value = '';
+ codex/update-filter-clear-functionality-k44hqf
+                    searchInputRef.current.focus();
+                }
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: currentScroll, left: 0 });
+                });
+
  codex/update-filter-clear-functionality-a1x80h
                     searchInputRef.current.focus();
                 }
@@ -924,6 +942,7 @@
  main
                 }
                 window.scrollTo({ top: currentScroll });
+ main
  main
             }
 
@@ -1209,6 +1228,7 @@
             <App />,
             document.getElementById('root')
         );
+        });
     </script>
 </body>
 </html>
