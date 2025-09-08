@@ -714,8 +714,12 @@
             const handleClearSearch = () => {
                 setQuery('');
                 setActiveCategory(null);
-                if(searchInputRef.current) {
+                if (searchInputRef.current) {
                     searchInputRef.current.value = '';
+                    // Keep the user focused on the search field after clearing
+                    searchInputRef.current.focus();
+                    // Ensure the search bar stays in view without jumping to the very top
+                    searchInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
             }
 
@@ -806,7 +810,17 @@
                                  })}
                              </div>
                              <div className="relative flex items-center">
-                                 <input ref={searchInputRef} type="text" placeholder="Buscar por nome ou sabor..." onChange={(e) => setQuery(e.target.value)} className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500" />
+                                <input
+                                    ref={searchInputRef}
+                                    type="text"
+                                    placeholder="Buscar por nome ou sabor..."
+                                    onChange={(e) => {
+                                        setQuery(e.target.value);
+                                        // Whenever a new search is performed, show all categories
+                                        setActiveCategory(null);
+                                    }}
+                                    className="w-full pl-4 pr-14 py-3 bg-gray-50 border border-gray-300 text-gray-900 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                                />
                                   <button className="absolute right-2 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors">
                                      <IconLupa />
                                  </button>
