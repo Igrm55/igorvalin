@@ -717,11 +717,18 @@
                 setActiveCategory(null);
                 if (searchInputRef.current) {
                     searchInputRef.current.value = '';
+ codex/update-filter-clear-functionality-zl9bhc
                     try {
                         searchInputRef.current.focus({ preventScroll: true });
                     } catch {
                         searchInputRef.current.focus();
                     }
+
+                    // Keep the user focused on the search field after clearing
+                    searchInputRef.current.focus();
+                    // Ensure the search bar stays in view without jumping to the very top
+                    searchInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+ main
                 }
                 window.scrollTo({ top: currentScroll });
             }
