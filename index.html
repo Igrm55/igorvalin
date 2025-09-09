@@ -691,6 +691,7 @@
             </div>
         );
 
+ codex/apply-image-scale-changes-to-productcard-ty5beq
         // Zoom por produto:
         // - "muito mais que os outros" => scale-150
         // - "aumente muito" (padrão)   => scale-125
@@ -809,6 +810,54 @@
         const SHIFT_BY_NAME = new Map([
           ["Refrigerante Goob 2L","translate-y-3"],  // empurra ~12px
           ["Suco Yulo 400ML","translate-y-3"],       // sem zoom, só baixar
+
+        const SCALE_BY_NAME = new Map([
+          // AUMENTAR
+          ["Refrigerante Goob 1L","scale-125"], ["Refrigerante Goob 230ML","scale-125"], ["Energético Ener Up 2L","scale-125"], ["Energético Ener Up 250ML","scale-125"],
+          ["Guaraná + Açaí Guaran Up de Copo 290ML","scale-125"], ["Guaraná + Açaí Guaran Up 200ML","scale-125"], ["Suco de Caixinha Yulo Tetra Park 200ML","scale-125"],
+          ["Suco Yulo 1,5L Frutas Cítricas","scale-125"], ["Suco Yulo 400ML","scale-125"], ["Chá Gelado Drink T 300ML","scale-125"], ["Energético Ener Up lata 269 ML","scale-125"],
+          ["Pitú Litro Completa (Sem devolver o Litro)","scale-125"], ["Pitú Devolvendo o Litro","scale-125"], ["Pitú de Garrafa 600ML","scale-125"],
+          ["Pitú Lata 473ML","scale-125"], ["Pitú Lata 350ML","scale-125"], ["Pitú Lata Sabor Limão e Mel 350ML","scale-125"], ["Pitú Lata Sabor Caju 350ML","scale-125"],
+          ["Pitú Lata Sabor Banana 350 ML","scale-125"], ["Ice Pitú 275 ML","scale-125"], ["Cachaça Paratudo 900ML","scale-125"], ["Cachaça 51 de 965 ML","scale-125"],
+          ["Cachaça Asa Branca 900ML","scale-125"], ["Cachaça Caninha Vida Nova 480 ML","scale-125"], ["Cachaça Asa Branca Jequitibá 980 ML","scale-125"],
+          ["Cachaça Seleta 1 L","scale-125"], ["Cachaça Velho Barreiro 910 ML","scale-125"], ["Cachaça 1883 De Alambique Ouro 980 ML","scale-125"],
+          ["Vodka Slova Tradicional 965 ML","scale-125"], ["Vodka Slova Sabor Limão 965 ML","scale-125"], ["Vodka Slova Blueberry 965 ML","scale-125"],
+          ["Vodka Slova Sabor Frutas Vermelhas 965 ML","scale-125"], ["Vodka Newsnoff 960 ML","scale-125"], ["Vodka Newsnoff Sabor Limão 960 ML","scale-125"],
+          ["Vodka Newsnoff Sabor Frutas Vermelhas 960 ML","scale-125"], ["Vodka Natasha 900 ML","scale-125"], ["Vodka Smirnoff 1 L","scale-125"], ["Vodka Absolut 1 L","scale-125"],
+          ["Whisky Black Stone 1L (Com Copo)","scale-125"], ["Whisky Old Par 1L","scale-125"], ["Whisky Jack Daniel’s 1L","scale-125"],
+          ["Whisky Jack Daniel’s Maçã Verde 1 L","scale-125"], ["Whisky Jack Daniel’s Mel 1 L","scale-125"], ["Whisky Red Label 1L","scale-125"],
+          ["Whisky Black Label 1 L","scale-125"], ["Whisky Teachers 1L","scale-125"], ["Whisky Passport Scotch 1L","scale-125"], ["Whisky Chanceler 1L","scale-125"],
+          ["Whisky Ballantine’s 1L","scale-125"], ["Whisky Black & White 1 L","scale-125"], ["Gin Tanqueray London Dry 1 L","scale-125"], ["Gin Beefeater London Dry 900 ML","scale-125"],
+          ["Genebra Dubar Zora 960 ML","scale-125"], ["Geneva Steinhaeger Becosa 980 ML","scale-125"], ["Ice Syn Lemon Ice 300ML","scale-125"],
+          ["Ice Glow 275 ML (Garrafa de Vidro)","scale-125"], ["Vinho Quinta do Morgado Suave 750ML","scale-125"], ["Vinho Cantina da Serra 1L","scale-125"],
+          ["Vinho Pérgula Tinto Suave 1L","scale-125"], ["Aperitivo Campari 900ML","scale-125"], ["Aperitivo Jurubeba Leão do Norte 600 ML","scale-125"],
+          ["Conhaque Dramontt 900ML","scale-125"], ["Conhaque Dreher 1L","scale-125"], ["Conhaque Domecq Coquetel Composto 1 L","scale-125"], ["Licor Menta São Paulo 960ML","scale-125"],
+          ["Catuaba Vida Nova 900ML","scale-125"], ["Alcatrão São João da Barra 900 ML","scale-125"], ["Bebida alcoólica Gengibre Vida Nova Verde 900ML","scale-125"],
+          ["Canelinha da Rocha 900ML","scale-125"], ["Bala Icekiss Sortida 500G","scale-125"], ["Bala Butter Toffees 500G","scale-125"],
+          ["Bala Santa Fé Mastigável Yogurt Morango 500G","scale-125"], ["Bala Santa Fé Mastigável Sortida Frutas 500G","scale-125"],
+          ["Balinhas Coração Morango Florestal 500G","scale-125"], ["Bala Mel e Gengibre","scale-125"], ["Bala de Hortelã Recheada","scale-125"],
+          ["Drops Halls","scale-125"], ["Drops Icekiss Sortido","scale-125"], ["Bala de Caramelo","scale-125"], ["Bala Coffee King","scale-125"],
+          ["Bala Azedinha","scale-125"], ["Bala Yogurte Sortido","scale-125"], ["Drops Freegells","scale-125"], ["Chicle Big Big","scale-125"],
+          ["Chiclete Trident","scale-125"], ["Chiclete Cliss","scale-125"], ["Chiclete Danclets Tutti Frutti","scale-125"], ["Chiclete Blong","scale-125"],
+          ["Goma Tubo Gurt","scale-125"], ["Goma Tubo Frutas Sortidas","scale-125"], ["Pirulito Megalito Pinta Língua","scale-125"],
+          ["Pirulito Big Pop Yogurt Rech Mastigável 500 G","scale-125"], ["Pirulito Big Pop Frutas Recheado Mastigável 500 G","scale-125"],
+          ["Pirulito Megalito Sortido Berbau 1 KG","scale-125"], ["Pirulito Pop Mix","scale-125"], ["Pirulito Yogo Pop Sortido","scale-125"],
+          ["Biscoito Recheado Fofinho","scale-125"], ["Mini Bolinho Capri 35G","scale-125"], ["Confeito Mamadeira","scale-125"], ["Confeito Skatinho","scale-125"],
+          ["Confeito Catavento","scale-125"], ["Confeito Carinhas","scale-125"], ["Confeito Chuquinhas","scale-125"], ["Chup Chup Doce de Leite 750G","scale-125"],
+          ["Geladão Ice Pop Sortido","scale-125"], ["Geladinho Ice Pop Sortido","scale-125"], ["Chocolate Puríssimo","scale-125"],
+          ["Doce Balsamo Pacote com 50 unidades","scale-125"], ["Pé de Moleque Pacote com 50 unidades","scale-125"], ["Pé de Moleque Pote com 50","scale-125"],
+          ["Cocada Branca","scale-125"], ["Cocada Morena","scale-125"], ["Goiabada de Pacote","scale-125"], ["Goiabada de Pote","scale-125"],
+          ["Bananada de Pacote","scale-125"], ["Bananada de Pote","scale-125"], ["Geleia de pote","scale-125"], ["Geleia Pacote","scale-125"],
+          ["Salgadinho Goxtoso 28G","scale-125"], ["Salgadinho Pimentinha Goxtoso 40G","scale-125"], ["Pipoca Doce Goxtoso 40G","scale-125"],
+          ["Salgadinho Batata Plus 40G","scale-125"], ["Salgadinho Agitos 85G","scale-125"], ["Salgadinho Pimentinha Sortida Agitos 40G","scale-125"],
+          ["Salgadinho Agitos 25G","scale-125"], ["Amendoim Japonês 1KG","scale-125"], ["Mendozitos Japonês 30G","scale-125"],
+          ["Amendoim Crocanty Pimenta Mexicana 30 G","scale-125"], ["Amendoim Crocante Bacon 30G","scale-125"], ["Amendoim Cebola e Salsa 30G","scale-125"],
+          ["Torresmo Pé de Serra","scale-125"], ["Pururuca Pé de Serra","scale-125"], ["Fumo Coringa","scale-125"], ["Papel para Fumo Bom de Fogo","scale-125"],
+          ["Cigarro de Palha Palheiro","scale-125"], ["Seda para Fumo Zomo","scale-125"], ["Fumo Meliá","scale-125"],
+
+          // DIMINUIR
+          ["Glow Ice 269ML (Lata)","scale-95"],
+ main
         ]);
 
         const ProductCard = ({ product, onImageClick }) => {
@@ -822,9 +871,15 @@
                             loading="lazy"
                             src={product.imageUrl}
                             alt={product.name}
+ codex/apply-image-scale-changes-to-productcard-ty5beq
                             className={`max-w-full max-h-full object-contain transform transition-transform duration-300 ${
                                 SCALE_BY_NAME.get(product.name) ? '' : 'group-hover:scale-105'
                             } ${SCALE_BY_NAME.get(product.name) || ''} ${SHIFT_BY_NAME.get(product.name) || ''} ${product.imageClass || ''}`}
+
+                            className={`max-w-full max-h-full object-contain transition-transform duration-300 ${
+                                SCALE_BY_NAME.get(product.name) ? '' : 'group-hover:scale-105'
+                            } ${SCALE_BY_NAME.get(product.name) || ''} ${product.imageClass || ''}`}
+ main
                         />
                     </div>
 
