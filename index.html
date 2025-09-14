@@ -221,8 +221,6 @@
             { id: 'p24', name: 'Energético Ener Up lata 269 ML', category: 'Bebidas não alcoólicas', details: [{flavor: 'Tradicional'}, {flavor: 'Maçã verde'}, {flavor: 'Tropical'}, {flavor: 'Frutas Vermelhas'}], imageUrl: 'https://i.ibb.co/QFn2KWcD/Gemini-Generated-Image-vx1r3mvx1r3mvx1r.png', sortOrder: 16, active: true },
 
             // Bebidas alcoólicas
-            { id: 'p-alc-1', name: 'Cerveja Brussels Lager 350ML', category: 'Bebidas alcoólicas', details: [{flavor: 'Lager'}], imageUrl: 'https://i.ibb.co/bjWqn9kf/lager.jpg', sortOrder: 17, active: true },
-            { id: 'p-alc-2', name: 'Cerveja Brussels Ultra 350ML', category: 'Bebidas alcoólicas', details: [{flavor: 'Ultra'}], imageUrl: 'https://i.ibb.co/5hq6TQHP/ultra.jpg', sortOrder: 18, active: true },
             { id: 'p-alc-3', name: 'Pitú Litro Completa (Sem devolver o Litro)', category: 'Bebidas alcoólicas', details: [{flavor: 'Tradicional'}], imageUrl: 'https://i.ibb.co/B5fHNL2y/aguardente-pitu-965ml-1a515249-2151-4db6-a2e5-57208f6a1803.jpg', sortOrder: 19, active: true },
             { id: 'p-alc-4', name: 'Pitú Devolvendo o Litro', category: 'Bebidas alcoólicas', details: [{flavor: 'Tradicional'}], imageUrl: 'https://i.ibb.co/Dy5gv5B/Gemini-Generated-Image-tfhzumtfhzumtfhz.png', sortOrder: 20, active: true },
             { id: 'p-alc-5', name: 'Pitú de Garrafa 600ML', category: 'Bebidas alcoólicas', details: [{flavor: 'Tradicional'}], imageUrl: 'https://i.ibb.co/27yx5ZBb/184178-800-450.webp', sortOrder: 21, active: true },
@@ -393,8 +391,6 @@
             'p22': 'O lanche das crianças ficou mais gostoso. Yulo 200ML é o tamanho perfeito para a lancheira e para o consumo infantil. A alta taxa de recompra da marca garante que, uma vez que as famílias experimentam, elas voltam. Um produto essencial para o seu mix.',
             'p23': 'Sabor, praticidade e refrescância. Ideal para o clima da nossa terra, o DrinkT apresenta um aumento de 27% no volume de vendas durante os dias mais quentes, sendo a escolha inteligente para se refrescar com qualidade e sabor. Um produto com alta margem e giro garantido no verão.',
             'p24': 'A energia na medida certa. O EnerUp em lata é um clássico moderno, com sabores que agradam a todos os paladares. Pesquisas de mercado indicam que 4 em cada 5 consumidores de energéticos preferem a embalagem em lata para consumo individual. Tenha todos os sabores e não perca vendas.',
-            'p-alc-1': 'A novidade que já é um sucesso. Com campanhas de marketing estreladas por Ronaldinho Gaúcho, a Brussels Lager chega com reconhecimento imediato. É uma puro malte leve e refrescante que atrai pela curiosidade e fideliza pelo sabor. Garanta um produto de alto impacto e giro rápido no seu negócio.',
-            'p-alc-2': 'A escolha inteligente para um público exigente. A Brussels Ultra é zero açúcar e zero carboidratos, atendendo a uma demanda crescente do mercado fitness e de quem busca opções mais saudáveis. A força da marca, impulsionada por grandes nomes, garante a venda. Tenha o diferencial que a concorrência não tem.',
             'p-alc-3': 'Tradição que nunca sai de moda. A Pitú de litro é um ícone cultural e um dos destilados mais vendidos do Brasil. Ter a versão "completa" atende o cliente que busca praticidade para consumo imediato em casa ou eventos. É um produto com venda garantida e fluxo constante.',
             'p-alc-4': 'Economia e fidelidade. O sistema de "devolver o litro" da Pitú é um grande atrativo para clientes recorrentes, garantindo que eles sempre voltem ao seu estabelecimento. É uma estratégia inteligente para aumentar o tráfego de clientes e garantir vendas contínuas do destilado mais querido do país.',
             'p-alc-5': 'A dose certa para encontros. A Pitú de 600ML é perfeita para compartilhar entre amigos, sendo uma opção muito procurada em bares e mercados. Sua versatilidade a torna um item de alto giro, ideal para quem busca a tradição da Pitú em uma embalagem intermediária.',
@@ -719,9 +715,8 @@
 
         const ProductCard = ({ product, onProductClick }) => {
             return (
-                <div 
-                    className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group cursor-pointer"
-                    onClick={() => onProductClick(product)}
+                <div
+                    className="bg-white rounded-3xl shadow-md overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 h-full group"
                 >
                     <div className="relative h-48 overflow-hidden bg-white flex items-center justify-center p-2">
                         <img 
@@ -745,6 +740,12 @@
                                 </p>
                             </div>
                         )}
+                        <button
+                            onClick={() => onProductClick(product)}
+                            className="mt-4 bg-green-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-300"
+                        >
+                            Ver mais
+                        </button>
                     </div>
                 </div>
             );
@@ -870,34 +871,12 @@
                                             </p>
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <img src="https://i.ibb.co/MkBdYQ1Z/484319138-122166789608286629-3240958178884466690-n.jpg" alt="Imagem ISM Brasil 1" className="rounded-2xl w-full h-40 sm:h-56 md:h-64 object-cover" />
-                                            <img src="https://i.ibb.co/PvnmNKKw/100.jpg" alt="Imagem ISM Brasil 2" className="rounded-2xl w-full h-40 sm:h-56 md:h-64 object-cover" />
+                                            <img src="https://i.ibb.co/PvnmNKKw/100.jpg" alt="100" className="rounded-2xl w-full h-auto object-contain" />
+                                            <img src="https://i.ibb.co/MkBdYQ1Z/484319138-122166789608286629-3240958178884466690-n.jpg" alt="484319138-122166789608286629-3240958178884466690-n" className="rounded-2xl w-full h-auto object-contain" />
                                         </div>
                                     </div>
                                 )}
                                 
-                                {!query && !activeCategory && group.category === 'Bebidas alcoólicas' && (
-                                    <div className="mb-8">
-                                        <div className="relative">
-                                            <div className="absolute top-0 left-4 bg-red-600 text-white font-bold py-2 px-4 rounded-b-xl z-20 shadow-lg transform -translate-y-2">
-                                                NOVIDADE
-                                            </div>
-                                            <div className="rounded-t-3xl shadow-lg overflow-hidden mt-4" style={{ backgroundColor: '#042f15' }}>
-                                                <img src="https://i.ibb.co/Vp9Pshb4/IMG-0863.jpg" alt="Novas Cervejas" className="w-full h-auto block" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/1200x300/1f2937/ffffff?text=Banner+Indisponível'; }}/>
-                                                <div style={{ height: '20px' }}></div>
-                                            </div>
-                                        </div>
-                                        <div className="wavy-top-connector rounded-b-3xl shadow-lg p-6 md:p-8 pt-10 relative z-10">
-                                            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-2" style={{ color: 'var(--brand-green)' }}>Brussels Puro Malte: a cerveja que se tornou febre nas redes sociais.</h3>
-                                            <p className="text-center text-gray-600 mb-6 max-w-3xl mx-auto text-sm sm:text-base">Com campanhas estreladas por Ronaldinho Gáucho, a Brussels chega com reconhecimento imediato do público.</p>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-                                                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-gray-50 border"><img src="https://i.ibb.co/bjWqn9kf/lager.jpg" alt="Lager" className="w-24 h-auto object-contain flex-shrink-0" /><div className="text-center sm:text-left"><h4 className="font-bold text-xl sm:text-2xl" style={{ color: 'var(--brand-green)' }}>Lager</h4><p className="text-gray-700 font-medium text-sm sm:text-base">puro malte leve e refrescante</p></div></div>
-                                                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 rounded-2xl bg-gray-50 border"><img src="https://i.ibb.co/5hq6TQHP/ultra.jpg" alt="Ultra" className="w-24 h-auto object-contain flex-shrink-0" /><div className="text-center sm:text-left"><h4 className="font-bold text-xl sm:text-2xl" style={{ color: '#1e3a8a' }}>Ultra</h4><p className="text-gray-700 font-medium text-sm sm:text-base">Puro malte zero açúcar e zero carboidrato com um sabor incrível</p></div></div>
-                                            </div>
-                                            <p className="text-center text-gray-800 font-medium max-w-3xl mx-auto text-sm sm:text-base">Com rótulos que chamam atenção e preços que garantem uma ótima margem, o giro é certo: a curiosidade do seu cliente traz o primeiro pedido, o sabor garante a recompra.</p>
-                                        </div>
-                                    </div>
-                                )}
 
                                 <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 flex items-center gap-4 justify-start" style={{textShadow: '1px 1px 3px rgba(0,0,0,0.5)'}}>
                                     <CategoryIcon src={CATEGORY_ICONS_DATA[group.category].src} alt={CATEGORY_ICONS_DATA[group.category].alt} isActive={true} size="w-8 h-8 sm:w-10 sm:h-10" />
